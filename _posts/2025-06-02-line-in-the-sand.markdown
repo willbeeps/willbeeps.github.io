@@ -1,42 +1,25 @@
 ---
 layout: post
-title:  "Plotting the family"
-category: making
-date:   2025-01-30 21:00:07 +0000
+title:  "Marking my line in the sand"
+category: User research
+date:   2025-06-02 16:00:07 +0000
 ---
 
-This is an attempt to run a script on my site that shows the relative heights of all the younger members of my family. I'm hoping that as few people as possible see this, so that I don't get anxious about putting this info in the public domain.
+How do we, as UX researchers, feel about the irony unfolding in our discipline currently? As AI platform CEOs and proselytisers promise a revolution in how companies engage with their users, the more we use the tools they promote, the more we discover that - maybe to our surprise? - the human element has never been more critical. Automating donkey work, sure, there’s great value in that (up to a point - more in a second), but the judgement, contextual understanding, nuance, whatever you want to call it, it’s miles away from what emerges from the probability engines. Generative AI as a replacement for real people? Although Synthetic Users is a wonderful bit of marketing attached to a seductive front-end, they admit, albeit buried within the marketing copy, it’s mostly there as a (very expensive) framing device, not as the genuine insight you’ll need. There is no new, lived experience being observed here. No mums on three hours’ sleep swearing at a fiddly interaction. No man on a rural wifi connection with failing sight who’s viewing your web app on 300% zoom.
 
-But it's hardly controversial stuff, so I don't know why I'm getting anxious. It just feels a bit _personal_, you know?
+But, yeah. Automation. Creating drafts, or prompts for interesting framing devices, are where I find ChatGPT/Claude deliver entirely new value. Basic analysis, open-ended coding, can be sped up. And maybe some of us are running AI moderators for more established problems, and finding that its results stack up. But in the main, it feels that we’re all learning that the results don’t stack up.
 
-**Steps taken**
-Here's how I created an interactive growth chart: 
-- Over the course of 10 years, mark down childrens’ heights! 
-- Collate all the data in a spreadsheet
-- Wait for AI to go mainstream, then pepper Claude/ChatGPT with questions about plotting data like this on an interactive graph, and tool recommendations
-- Follow the instructions, with various bits of trial and error, until you hafve a working prototype
-- Work out how to style the chart in a suitably user-friendly fashion
-- Return to your AI chums to understand how this could be put online
-- Push to new website
-- Send to family members and write this blogpost
+Yet here’s the actual irony. If these issues are what we’ve been observing and experiencing, they’re not being heard. Or if they are, it’s all couched in terms of our new roles being ‘strategic oversight’, where the bulk of the research activity has been automated to leave us with more time to concentrate on the higher-value aspects of the job. So either the AI does it all, or we only need 10% of researchers to be able to do all the work. 
 
-**Prompts used:**
-1.
-I need support creating a data visualisation. I have a spreadsheet of measurements of a number of people, detailing their height (in cm) across many years. What I'd like to do is turn this into an interactive chart, which I could publish online, whereby a user would be able to hover over any point on a given person's line, and a box would pop up showing the height & their age at the time of measurement.  What tool could i use to create this?
-_Claude recommended Plotly, Chart.js and D3.js. I wanted to use Python, not js, so went with Plotly._
-2.
-Please write some example code that creates exactly what I’m looking for
-_Claude created a script for me._
+But the inaccuracy of what the models produce, allied to the fact that in order to deliver insight, you do need to embody the problem, means that, well, I’m not seeing a hell a lot of time saving out of all this. If you don't know your research data inside-out, you can't spot when an AI tool produces something plausible but wrong.  Knowing how to deliver the value from qualitative research, interviews that take you past the generic, remains a stand-out skill, especially if it becomes another space in which we need to evaluate the work of our LLM colleagues. So you’ve still got to put in the hours. 
 
-3. 
-My data is laid out in four columns: Name, Height, Age, Date. I now need to work out how to get this into the Python script and run it in plotly.
-_hit an error_
+I don’t think I’m being luddite - or at least, too luddite. I recognise that the future of our discipline lies in our relationship with AI models, and how we’re only just starting to design that relationship. I also recognise that there’s a huge chunk of work to be done to research generative AI-driven experiences, too - we’re not just studying users interacting with static products, the experiences evolve and learn over time, which could lend itself to AI-driven studies. 
 
-4 (and 5,6,7,8,9...) 
-I am getting the error [xxx] in Terminal. What could be causing this?
-_Lots of back and forth at this point, due to the fact that the script had cached a view of the spreadsheet and was including a trailing space in one of the column titles._ 
+But to be too BML about this feels risky. Something deep in my bones wants to make sure that the learning happens through prototyping, in more controlled circumstances, rather than on the general population. This means more co-design workshops, not fewer. More human involvement, not less. 
 
-Finally got it up and running. Hey presto...
+The cognitive work of connecting business goals to research findings, of thinking through implications while deep in the data, will stay human. Shortcuts in this thinking process don’t reduce billable hours - they reduce the quality of insights.
+
+
 
 <div class="full-width"> 
         <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
