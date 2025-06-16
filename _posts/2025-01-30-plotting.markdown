@@ -21,20 +21,27 @@ Here's how I created an interactive growth chart:
 - Send to family members and write this blogpost
 
 **Prompts used:**
-****Step 1****
+
+***Step 1***
 I need support creating a data visualisation. I have a spreadsheet of measurements of a number of people, detailing their height (in cm) across many years. What I'd like to do is turn this into an interactive chart, which I could publish online, whereby a user would be able to hover over any point on a given person's line, and a box would pop up showing the height & their age at the time of measurement.  What tool could i use to create this?
-_Claude recommended Plotly, Chart.js and D3.js. I wanted to use Python, not js, so went with Plotly._
-****Step 2****
+
+_Claude recommended Plotly, Chart.js and D3.js. I wanted to use Python, not js, so went with Plotly_.
+
+***Step 2***
 Please write some example code that creates exactly what I’m looking for.
 
 _Claude created a script for me._
-****Step 3**** 
-My data is laid out in four columns: Name, Height, Age, Date. I now need to work out how to get this into the Python script and run it in plotly.
-_hit an error_
 
-****Step 4 (and 5,6,7,8,9...)**** 
+***Step 3***
+
+My data is laid out in four columns: Name, Height, Age, Date. I now need to work out how to get this into the Python script and run it in plotly.
+
+_hit an error_.
+
+**Step 4 (and 5,6,7,8,9...)*** 
 I am getting the error [xxx] in Terminal. What could be causing this?
-_Lots of back and forth at this point, due to the fact that the script had cached a view of the spreadsheet and was including a trailing space in one of the column titles._ 
+
+_Lots of back and forth at this point, due to the fact that the script had cached a view of the spreadsheet and was including a trailing space in one of the column titles_. 
 
 Finally got it up and running. Hey presto...
 
