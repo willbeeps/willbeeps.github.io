@@ -1,6 +1,8 @@
-----
-Title: 
-
+---
+layout: post
+title:  "Notes on AI from 2023"
+date:   2024-01-15 11:31:07 +0000
+category: User research, AI
 ---
 
 Here are a few brief quotes and thoughts from the past year or so that feel a bit useful. 
