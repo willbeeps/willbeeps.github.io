@@ -1,4 +1,9 @@
-***AI and sustainability***
+---
+layout: post
+title:  "AI and sustainability"
+date:   2025-04-23 18:11:07 +0000
+category: AI
+---
 
 I picked up a few threads from a conversation in December 2023, where Naveen Balani, Chris McClean and others were talking about where ‘green’ AI could be headed. I noted some great points, a lot of them to do with the application of models in enterprise environments: 
 - Caching and timeshifting as key tools in the development workflow, to flex how much energy is used depending on its production status
