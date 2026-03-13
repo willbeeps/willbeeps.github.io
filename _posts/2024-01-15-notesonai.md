@@ -7,14 +7,14 @@ category: User research, AI
 
 Here are a few brief quotes and thoughts from the past year or so that feel a bit useful. 
 
-[Stress testing AI in user research by Yulya Besplemennova] (https://yulya.medium.com/stress-testing-ai-in-user-research-e70ccda41496) - Nov 2023 
+[Stress testing AI in user research by Yulya Besplemennova](https://yulya.medium.com/stress-testing-ai-in-user-research-e70ccda41496) - Nov 2023 
 - Look for transcription applications that offer a Chat-GPT-enabled summary service
 - Some tools may help with synthesis - the Miro AI might be useful?
 - eesel.ai might be useful 
 
-> The primary benefit of using AI, I believe, is its role in simulating a discussion. A simulated dialogue offers valuable input, helping to sustain momentum in the thought process and prevent cognitive blocks.
+**The primary benefit of using AI, I believe, is its role in simulating a discussion. A simulated dialogue offers valuable input, helping to sustain momentum in the thought process and prevent cognitive blocks.**
 
-[The year of AI through a User Researcher’s eyes] (https://sofyabourne.medium.com/the-year-of-ai-through-a-user-researchers-eyes-c77eb682d9d4), by Sofya Bourne, Dec 2023
+[The year of AI through a User Researcher’s eyes](https://sofyabourne.medium.com/the-year-of-ai-through-a-user-researchers-eyes-c77eb682d9d4), by Sofya Bourne, Dec 2023
 - pi.ai as a personal assistant: it can remember what we talked about days and weeks ago, but asking it for a reminder of a vague idea or a random thought that I mentioned to it some weeks ago is still, sadly, a bit hit and miss
 - What generative AI tools can do is incredible and is the closest we’ve come to the realm of sci-fi in real life. But their amazing abilities are also precisely why it’s so easy for users to imagine AI capabilities to be way more advanced and broad than they are at present. This mismatch between users’ expectations and the reality of AI capabilities can lead to user frustration, disengagement and mistrust in AI tools.
 - I suspect that the frustration I feel when I want an AI tool to help me 10x my capabilities but all it can produce is a half-coherent summary of an interview transcript is a manifestation of some fundamental AI UX design principle we’re yet to define.
