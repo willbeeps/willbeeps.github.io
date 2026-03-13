@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "AI and sustainability"
-date:   2025-04-23 18:11:07 +0000
+date:   2025-07-03 18:11:07 +0000
 category: AI
 ---
 
