@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+  {%- include head.html -%}
+  <body>
+    {%- include header.html -%}
+
+    <main class="page-content case-page" aria-label="Content">
+      <div class="wrapper">
+        <div class="case-wrap">
+
+          <a href="/work" class="case-back">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M10 3 L5 8 L10 13"/>
+            </svg>
+            Back to Work
+          </a>
+
+          <header class="case-hero reveal">
+            <div class="case-hero-left">
+              {%- if page.tags %}
+              <div class="case-tag-row">
+                {%- for tag in page.tags %}
+                <span class="case-tag-chip"><span class="case-tag-sq"></span>{{ tag }}</span>
+                {%- endfor %}
+              </div>
+              {%- endif %}
+              <span class="case-eyebrow">Case study{%- if page.date_range %} · {{ page.date_range }}{%- elsif page.year %} · {{ page.year }}{%- endif %}</span>
+              <h1 class="case-title">{{ page.title }}</h1>
+            </div>
+            {%- if page.kicker %}
+            <p class="case-kicker">{{ page.kicker }}</p>
+            {%- endif %}
+          </header>
+
+          <div class="case-meta-strip reveal">
+            <div class="case-meta-cell">
+              <div class="case-meta-k">Client</div>
+              <div class="case-meta-v">{{ page.organisation | default: page.title }}{%- if page.organisation_note %}<em>{{ page.organisation_note }}</em>{%- endif %}</div>
+            </div>
+            <div class="case-meta-cell">
+              <div class="case-meta-k">Role</div>
+              <div class="case-meta-v">{{ page.role }}{%- if page.role_note %}<em>{{ page.role_note }}</em>{%- endif %}</div>
+            </div>
+            <div class="case-meta-cell">
+              <div class="case-meta-k">Year</div>
+              <div class="case-meta-v">{{ page.date_range | default: page.year }}{%- if page.date_note %}<em>{{ page.date_note }}</em>{%- endif %}</div>
+            </div>
+            <div class="case-meta-cell">
+              <div class="case-meta-k">Status</div>
+              <div class="case-meta-v">{{ page.status | default: "In portfolio" }}{%- if page.status_note %}<em>{{ page.status_note }}</em>{%- endif %}</div>
+            </div>
+          </div>
+
+          {%- if page.outcomes %}
+          <div class="case-outcomes-card reveal">
+            {%- for outcome in page.outcomes %}
+            <div class="case-outcomes-item">
+              <div class="case-outcomes-k">{{ outcome.key }}</div>
+              <div class="case-outcomes-v">{{ outcome.value }}</div>
+              {%- if outcome.note %}<div class="case-outcomes-n">{{ outcome.note }}</div>{%- endif %}
+            </div>
+            {%- endfor %}
+          </div>
+          {%- endif %}
+
+          <div class="case-body reveal">
+            {%- include case-gate.html -%}
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    {%- include footer.html -%}
+
+    <script>
+    (function () {
+      var all = document.querySelectorAll('.case-page .reveal');
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      all.forEach(function (el) {
+        if (el.getBoundingClientRect().top < vh * 0.95) el.classList.add('is-in');
+      });
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting) {
+            entries[i].target.classList.add('is-in');
+            io.unobserve(entries[i].target);
+          }
+        }
+      }, { rootMargin: '0px', threshold: 0 });
+      all.forEach(function (el) {
+        if (!el.classList.contains('is-in')) io.observe(el);
+      });
+    }());
+    </script>
+  </body>
+</html>

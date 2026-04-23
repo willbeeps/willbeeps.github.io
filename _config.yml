@@ -26,9 +26,10 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://willbeeps.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 author: Will Scott
 linkedin_username: will-scott-bristol
-twitter_username: willbeeps
 github_username:  willbeeps
-  
+# Generate your hash at: https://emn178.github.io/online-tools/sha256.html
+case_password_hash: "a4634e01a909041817bdc1e0f86e9624ed5263c408d726fadd0b52cb1d2881c8"
+
 # Build settings
 theme: minima
 markdown: kramdown
@@ -60,7 +61,13 @@ collections:
   cases:
     output: true
     permalink: /cases/:title/
+
 defaults:
+  - scope:
+      path: ""
+      type: "cases"
+    values:
+      layout: "case"
   - scope:
       path: ""
       type: "notes"
@@ -79,3 +86,4 @@ defaults:
       path: "assets/images"
     values:
       image: true
+

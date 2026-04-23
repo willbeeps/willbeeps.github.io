@@ -1,0 +1,80 @@
+{% if page.protected %}
+
+<div id="case-gate">
+  <div class="gate-wrapper">
+    <p class="gate-label">This case study is password protected.</p>
+    <form id="gate-form" onsubmit="return false;">
+      <input
+        type="password"
+        id="gate-input"
+        placeholder="Enter password"
+        autocomplete="current-password"
+        aria-label="Case study password"
+      />
+      <button type="submit" id="gate-submit">View case study</button>
+    </form>
+    <p class="gate-error" id="gate-error" style="display:none;">
+      Incorrect password. <a href="mailto:will@willbeeps.com">Get in touch</a> if you need access.
+    </p>
+  </div>
+</div>
+
+<div id="case-content" style="display:none;">
+  {{ content }}
+</div>
+
+<script>
+(function () {
+  var SESSION_KEY = 'willbeeps_case_auth';
+  var HASH = '{{ site.case_password_hash }}';
+
+  function sha256(str) {
+    var buffer = new TextEncoder().encode(str);
+    return crypto.subtle.digest('SHA-256', buffer).then(function (hash) {
+      return Array.from(new Uint8Array(hash))
+        .map(function (b) { return b.toString(16).padStart(2, '0'); })
+        .join('');
+    });
+  }
+
+  function unlock() {
+    document.getElementById('case-gate').style.display = 'none';
+    document.getElementById('case-content').style.display = 'block';
+  }
+
+  function init() {
+    if (sessionStorage.getItem(SESSION_KEY) === 'true') {
+      unlock();
+      return;
+    }
+
+    document.getElementById('case-gate').style.display = 'block';
+
+    document.getElementById('gate-form').addEventListener('submit', function () {
+      var input = document.getElementById('gate-input').value;
+      sha256(input).then(function (hash) {
+        if (hash === HASH) {
+          sessionStorage.setItem(SESSION_KEY, 'true');
+          unlock();
+        } else {
+          document.getElementById('gate-error').style.display = 'block';
+          document.getElementById('gate-input').value = '';
+          document.getElementById('gate-input').focus();
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+{% else %}
+
+{{ content }}
+
+{% endif %}

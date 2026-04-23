@@ -2,7 +2,7 @@
 layout: post
 title:  "What even is user research"
 date:   2025-04-24 21:31:07 +0000
-category: User research
+categories: [User Research]
 ---
 
 _This an ancient x-post from [Medium](https://medium.com/@willbeeps/what-even-is-user-research-already-d7e8af178370). Still up for knowing if you think this is a useful way of encapsulating things._

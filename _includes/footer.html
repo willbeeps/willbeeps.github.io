@@ -1,26 +1,14 @@
-<footer class="site-footer h-card">
-  <data class="u-url" href="{{ "/" | relative_url }}"></data>
-
-  <div class="wrapper">
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li class="p-name">
-            © {{ site.title | escape }} 2025
-            </li>
-        </ul>
-      </div>
-
-      <div class="footer-col footer-col-2">
-        {%- include social.html -%}
-      </div>
-
-      <div class="footer-col footer-col-3">
-        <p>{{- site.description | escape -}}</p>
-      </div>
-    </div>
-
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-copy">© Will Scott 2025</span>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="{{ '/writing/' | relative_url }}">Writing</a>
+      <a href="{{ '/work/' | relative_url }}">Work</a>
+      <a href="{{ '/now/' | relative_url }}">Now</a>
+    </nav>
+    <nav class="footer-social" aria-label="Social links">
+      <a href="https://www.linkedin.com/in/willscott-ux/" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+      <a href="https://github.com/willbeeps" rel="noopener noreferrer" target="_blank">GitHub</a>
+    </nav>
   </div>
-
 </footer>

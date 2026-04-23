@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "A line in the sand"
-category: User research, AI
+categories: [User Research, AI]
 date:   2025-06-02 16:00:07 +0000
 ---
 

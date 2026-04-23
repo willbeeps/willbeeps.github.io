@@ -1,0 +1,332 @@
+{% comment %}
+  figure-showcase.html — Full-width figure component with lightbox
+  ================================================================
+  Usage:
+    {% include figure-showcase.html
+       label="FIG. 01 · ARCHITECTURE DIAGRAM"
+       title="The system map that unlocked the conversation"
+       description="Drawn across three workshops, this became the shared reference point for every decision about automation scope."
+       image="/assets/images/nsjsa-architecture.png"
+       alt="NSJSA service architecture diagram, V4, November 2024"
+    %}
+
+  Parameters:
+    label        — Small uppercase metadata string (optional)
+    title        — Short heading for the artefact (optional)
+    description  — 1–3 sentence explanation (optional)
+    image        — Path to image (required)
+    alt          — Alt text for the image (required)
+{% endcomment %}
+
+<style>
+/* =============================================================
+   figure-showcase — scoped component styles
+   Safe to include multiple times on the same page (idempotent).
+   ============================================================= */
+
+.figure-showcase {
+  /* Local token aliases — component is self-contained */
+  --fs-ink:       #1e1b19;
+  --fs-umber:     #5a5147;
+  --fs-dust:      #9c8f82;
+  --fs-linen:     #ede4db;
+  --fs-stone:     #e0d5c8;
+  --fs-spring:    #3ddc84;
+  --fs-klein:     #2a3fa8;
+  --fs-parchment: #fdf8f5;
+
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  align-items: start;
+  background: var(--fs-linen);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 2.8em 0;
+}
+
+.figure-showcase__caption {
+  padding: 36px 28px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.figure-showcase__label {
+  font-family: 'Enriqueta', serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fs-dust);
+  line-height: 1.4;
+  display: block;
+}
+
+.figure-showcase__title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--fs-ink);
+  margin: 0;
+}
+
+.figure-showcase__description {
+  font-family: 'Enriqueta', serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fs-umber);
+  margin: 0;
+}
+
+.figure-showcase__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Enriqueta', serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fs-ink);
+  background: var(--fs-spring);
+  border: none;
+  border-radius: 2px;
+  padding: 7px 14px;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: background 0.15s ease, color 0.15s ease;
+  text-decoration: none;
+  /* Reset any global a/button styles that may bleed in */
+  text-underline-offset: unset;
+  text-decoration-color: unset;
+  text-decoration-thickness: unset;
+}
+
+.figure-showcase__cta:hover {
+  background: var(--fs-klein);
+  color: var(--fs-parchment);
+}
+
+.figure-showcase__cta:focus-visible {
+  outline: 2px solid var(--fs-klein);
+  outline-offset: 3px;
+  background: var(--fs-klein);
+  color: var(--fs-parchment);
+}
+
+.figure-showcase__media {
+  background: var(--fs-stone);
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.figure-showcase__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;
+  transition: transform 0.35s ease;
+}
+
+.figure-showcase__img:hover {
+  transform: scale(1.025);
+}
+
+/* ---- Lightbox overlay ---- */
+
+#fss-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(15, 28, 63, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 5vw, 60px);
+  box-sizing: border-box;
+  cursor: zoom-out;
+}
+
+#fss-overlay[hidden] {
+  display: none;
+}
+
+#fss-overlay-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 2px;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.3);
+  cursor: default;
+}
+
+#fss-overlay-close {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: rgba(253, 248, 245, 0.65);
+  cursor: pointer;
+  padding: 8px;
+  line-height: 0;
+  transition: color 0.15s ease;
+  z-index: 9001;
+}
+
+#fss-overlay-close:hover {
+  color: #fdf8f5;
+}
+
+#fss-overlay-close:focus-visible {
+  outline: 2px solid #3ddc84;
+  outline-offset: 4px;
+  border-radius: 2px;
+  color: #fdf8f5;
+}
+
+/* ---- Mobile ---- */
+
+@media (max-width: 640px) {
+  .figure-showcase {
+    grid-template-columns: 1fr;
+  }
+
+  .figure-showcase__caption {
+    padding: 24px 20px 20px;
+  }
+
+  .figure-showcase__media {
+    min-height: 0;
+  }
+}
+</style>
+
+<figure class="figure-showcase" role="figure" aria-label="{{ include.title | default: include.alt | default: 'Figure' }}">
+
+  <div class="figure-showcase__caption">
+    {% if include.label %}
+    <span class="figure-showcase__label">{{ include.label }}</span>
+    {% endif %}
+
+    {% if include.title %}
+    <p class="figure-showcase__title">{{ include.title }}</p>
+    {% endif %}
+
+    {% if include.description %}
+    <p class="figure-showcase__description">{{ include.description }}</p>
+    {% endif %}
+
+    <button class="figure-showcase__cta"
+            type="button"
+            aria-haspopup="dialog"
+            aria-label="Expand image{% if include.title %}: {{ include.title }}{% endif %}"
+            data-fss-src="{{ include.image }}"
+            data-fss-alt="{{ include.alt }}">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+        <path d="M1 10 L10 1 M10 1 H4 M10 1 V7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Expand
+    </button>
+  </div>
+
+  <div class="figure-showcase__media">
+    <img class="figure-showcase__img"
+         src="{{ include.image }}"
+         alt="{{ include.alt }}"
+         loading="lazy"
+         data-fss-src="{{ include.image }}"
+         data-fss-alt="{{ include.alt }}">
+  </div>
+
+</figure>
+
+<script>
+/* figure-showcase — singleton lightbox init */
+(function () {
+  if (window.__fssInit) return;
+  window.__fssInit = true;
+
+  /* ---- Build overlay (once, appended to body) ---- */
+  var overlay = document.createElement('div');
+  overlay.id = 'fss-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', 'Image viewer');
+  overlay.setAttribute('tabindex', '-1');
+  overlay.hidden = true;
+
+  var closeBtn = document.createElement('button');
+  closeBtn.id = 'fss-overlay-close';
+  closeBtn.setAttribute('aria-label', 'Close image viewer');
+  closeBtn.innerHTML =
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+      '<line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+      '<line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+    '</svg>';
+
+  var img = document.createElement('img');
+  img.id = 'fss-overlay-img';
+  img.src = '';
+  img.alt = '';
+
+  overlay.appendChild(closeBtn);
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+
+  /* ---- State ---- */
+  var prevFocus = null;
+
+  function open(src, alt) {
+    prevFocus = document.activeElement;
+    img.src = src;
+    img.alt = alt || '';
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    /* defer focus until overlay is painted */
+    requestAnimationFrame(function () { overlay.focus(); });
+  }
+
+  function close() {
+    overlay.hidden = true;
+    img.src = '';
+    document.body.style.overflow = '';
+    if (prevFocus) prevFocus.focus();
+    prevFocus = null;
+  }
+
+  /* ---- Keyboard: Escape closes, Tab stays inside ---- */
+  overlay.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+      return;
+    }
+    /* Focus trap — only interactive element is the close button */
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      closeBtn.focus();
+    }
+  });
+
+  /* ---- Click backdrop to close ---- */
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) close();
+  });
+
+  closeBtn.addEventListener('click', close);
+
+  /* ---- Delegated trigger: button and image inside .figure-showcase ---- */
+  document.addEventListener('click', function (e) {
+    var trigger = e.target.closest('[data-fss-src]');
+    if (!trigger || !trigger.closest('.figure-showcase')) return;
+    open(trigger.dataset.fssSrc, trigger.dataset.fssAlt);
+  });
+}());
+</script>

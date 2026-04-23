@@ -2,14 +2,14 @@
 layout: post
 title:  "Notes on the Atlas of AI"
 date:   2025-04-23 18:11:07 +0000
-category: AI
+categories: [AI]
 ---
 
 I enjoyed reading Kate Crawford’s _Atlas of AI: Power, Politics, and the Planetary Costs of Artificial Intelligence_ last year.
 
 Two snippets that gave me pause: 
 1. The debate about AI and its impact on human worker agency can be seen as a continuum of long-standing issues: 
- _“For Smith, the economic value of an object was understood in relation to the cost of the labor required to produce it. In Babbage’s rendering, however, value in a factory was derived from investment in the design of the manufacturing process rather than from the labor force of its employees. The real innovation was the logistical process, while workers simply enacted the tasks defined for them and operated the machines as instructed. 
+ _“For Smith, the economic value of an object was understood in relation to the cost of the labor required to produce it. In Babbage’s rendering, however, value in a factory was derived from investment in the **design of the manufacturing process rather than from the labor force of its employees**. The real innovation was the logistical process, while workers simply enacted the tasks defined for them and operated the machines as instructed. 
 The factory is conceived as a rational calculating machine with only one weakness: its frail and untrustworthy human labor force. There are risks in centering tech workers and technology in what are more generalized and long-standing labor struggles. All kinds of workers are subject to the extractive technical infrastructures that seek to control and analyze time to its finest grain.”_
 
 2. And on that ‘extractive’ point, a reminder to think more broadly about the media we generate. Jussi Parikka suggests we think of media not from a McLuhan perspective, where it's all an extension of our senses — but rather as **extensions of Earth**. 

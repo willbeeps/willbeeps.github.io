@@ -1,55 +1,42 @@
 ---
 layout: default
 ---
-<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="post-header">
-    <div class="post-content">
-    <div class="post-return">
-    <p><a href="/writing">Back to Writing</a></p>
-    </div>
-    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
-    <p class="post-meta">
-      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        {{ page.date | date: date_format }}
-      </time>
-      {%- if page.author -%}
-        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
-      {%- endif -%}</p>
-    </div>
-  </div>
+<article class="post-wrapper h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <div class="post-content e-content" itemprop="articleBody">
+  <a class="post-back" href="/writing">← Writing</a>
+
+  <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+  <p class="post-meta">
+    <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+      {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+      {{ page.date | date: date_format }}
+    </time>
+    {%- if page.categories.size > 0 -%}
+      &nbsp;&middot;&nbsp;{{ page.categories | join: ", " }}
+    {%- endif -%}
+    {%- if page.author -%}
+      &nbsp;&middot;&nbsp;<span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
+    {%- endif -%}
+  </p>
+
+  <div class="post-body e-content" itemprop="articleBody">
     {{ content }}
   </div>
 
-<div class="post-nav">
-  <div>
-    {% if page.previous.url %}
-      <a href="{{page.previous.url}}">
-        <span class="unsighted">Previous post:</span>
-        <span aria-hidden="true">&laquo;</span>
-        {{page.previous.title}}
-      </a>
-    {% endif %}
-  </div>
-  <div class="post-nav-next">
-    {% if page.next.url %}
-    {% assign next_post_title_array = page.next.title | split: " " %}
-    {% assign next_post_cape_length = next_post_title_array | size | minus: 1 %}
-    {% assign next_post_cape = page.next.title | truncatewords: next_post_cape_length, "" %}
-    {% assign next_post_spit = next_post_title_array | last %}
-    <a href="{{page.next.url}}">
-      <span class="unsighted">Next post:</span>
-      {{next_post_cape}}
-      <span style="white-space: nowrap;">
-      {{next_post_spit}}
-      <span aria-hidden="true">&raquo;</span>
-      </span>
-    </a>
-    {% endif %}
-  </div>
-</div>
+  <nav class="post-footer-nav" aria-label="Post navigation">
+    <div class="post-nav-item">
+      {% if page.previous.url %}
+        <span class="post-nav-label">Previous</span>
+        <a href="{{ page.previous.url }}">{{ page.previous.title }}</a>
+      {% endif %}
+    </div>
+    <div class="post-nav-item">
+      {% if page.next.url %}
+        <span class="post-nav-label">Next</span>
+        <a href="{{ page.next.url }}">{{ page.next.title }}</a>
+      {% endif %}
+    </div>
+  </nav>
 
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}

@@ -2,33 +2,55 @@
 layout: default
 title: Writing
 permalink: /writing/
+page_class: writing-page
 ---
 
 <div class="writing">
-  <h1>Writing</h1>
+  <div class="writing-hero">
+    <h1>Writing on design, side quests, and keeping this human in the loop.</h1>
+    <p class="writing-intro">A personal weblog in 2026 is both shouting at clouds, and a statement of intent. This site is to catalogue my interest in research, interaction design, and personal thought bubbles that need to get popped somewhere or other.</p>
+  </div>
 
-        <p>A personal weblog in 2025 is both shouting at clouds, and a statement of intent. This site is to catalogue my interest in research, interaction design, and personal thought bubbles that need to get popped somewhere or other.</p>
+  <div class="category-filters">
+    <button class="filter-button active" data-category="all">All</button>
+    {% for category in site.categories %}
+      <button class="filter-button" data-category="{{ category[0] }}">{{ category[0] }}</button>
+    {% endfor %}
+  </div>
 
-<!-- Filter buttons -->
-<div class="filters">
-  <button class="filter-button active" data-category="all">All</button>
-  {% for category in site.categories %}
-    <button class="filter-button" data-category="{{ category[0] }}">
-      {{ category[0] }}
-    </button>
-  {% endfor %}
-</div>
+  {% assign featured_post = site.posts | first %}
 
-<!-- Post grid -->
-
-<section class="grid-listing">
-  {% for post in site.posts %}
-    <article class="card post" data-categories="{{ post.categories | join: ',' }}">
-      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-      <subtitle>{{ post.date | date: "%B %d, %Y"}}</subtitle>
-      <p>{{ post.excerpt }}</p>
+  <div class="featured-post-wrapper">
+    <article class="featured-post post" data-categories="{{ featured_post.categories | join: ',' }}">
+      {% if featured_post.image %}
+        <img src="{{ featured_post.image | relative_url }}" alt="{{ featured_post.title }}" class="featured-thumb">
+      {% else %}
+        <div class="featured-thumb-placeholder"></div>
+      {% endif %}
+      <div class="featured-post-content">
+        <h2 class="featured-title"><a href="{{ featured_post.url | relative_url }}">{{ featured_post.title }}</a></h2>
+        <p class="post-meta">{{ featured_post.date | date: "%b %-d, %Y" }} &middot; {{ featured_post.categories | join: ", " }}</p>
+        <p class="featured-excerpt">{{ featured_post.excerpt | strip_html | truncatewords: 40 }}</p>
+      </div>
     </article>
-  {% endfor %}
-</section>
+  </div>
 
+  <section class="writing-grid">
+    {% for post in site.posts %}
+      {% unless forloop.first %}
+      <article class="card post" data-categories="{{ post.categories | join: ',' }}">
+        {% if post.image %}
+          <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" class="card-thumb">
+        {% else %}
+          <div class="card-thumb-placeholder"></div>
+        {% endif %}
+        <div class="card-content">
+          <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+          <p class="post-meta">{{ post.date | date: "%b %-d, %Y" }} &middot; {{ post.categories | join: ", " }}</p>
+          <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+        </div>
+      </article>
+      {% endunless %}
+    {% endfor %}
+  </section>
 </div>

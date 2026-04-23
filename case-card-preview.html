@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Study Cards — Preview · willbeeps.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Enriqueta:wght@400;600&display=swap" rel="stylesheet">
+
+<!--
+  ============================================================
+  case-card component — willbeeps.com design system
+  ============================================================
+
+  Jekyll _includes usage (adapt as needed):
+  ==========================================
+
+  {% assign bg_cycle = "parchment,blush,linen" | split: "," %}
+  {% for case in site.cases %}
+    {% assign bg = bg_cycle[forloop.index0 | modulo: 3] %}
+    <a class="case-card case-card--{{ bg }}" href="{{ case.url }}">
+      <div class="case-card__top">
+        <span class="case-card__sector">{{ case.sector }}</span>
+        <span class="case-card__number">Nº {{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+      </div>
+      <h2 class="case-card__org">{{ case.organisation }}</h2>
+      <div class="case-card__meta">
+        <div class="case-card__meta-item">
+          <span class="case-card__meta-label">Role</span>
+          <span class="case-card__meta-value">{{ case.role }}</span>
+        </div>
+        <div class="case-card__meta-item">
+          <span class="case-card__meta-label">Year</span>
+          <span class="case-card__meta-value">{{ case.date_range | default: case.year }}</span>
+        </div>
+      </div>
+      <p class="case-card__brief">{{ case.brief }}</p>
+      <div class="case-card__bottom">
+        <span class="case-card__cta">Read the case →</span>
+        <span class="case-card__status">
+          <span class="case-card__status-dot" aria-hidden="true"></span>
+          {{ case.status }}{% if case.status_note %} · {{ case.status_note }}{% endif %}
+        </span>
+      </div>
+    </a>
+  {% endfor %}
+
+  Required frontmatter fields:
+    sector:       "Government"
+    organisation: "Department for Work and Pensions"
+    role:         "Lead UX Consultant / Service Designer"
+    year:         2024          (or use date_range: "2024–2025")
+    date_range:   "2024–2025"   (optional, overrides year if present)
+    brief:        "One strong sentence describing the engagement."
+    status:       "Shipped"
+    status_note:  "Private beta"  (optional)
+  ============================================================
+-->
+
+<style>
+  /* ============================================================
+     Design tokens
+     ============================================================ */
+  :root {
+    --parchment: #fdf8f5;
+    --blush:     #f5ece6;
+    --linen:     #ede4db;
+    --stone:     #e0d5c8;
+    --ink:       #1e1b19;
+    --umber:     #5a5147;
+    --dust:      #9c8f82;
+    --spring:    #3ddc84;
+    --klein:     #2a3fa8;
+    --midnight:  #0f1c3f;
+
+    --pad-x: clamp(24px, 9vw, 128px);
+    --display: 'DM Serif Display', Georgia, serif;
+    --body: 'Enriqueta', Georgia, serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    background: var(--parchment);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--spring); color: var(--ink); }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; }
+  p { margin: 0; }
+
+  /* ============================================================
+     Case card
+     ============================================================ */
+
+  .case-card {
+    display: block;
+    width: 100%;
+    padding: 64px var(--pad-x) 72px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  /* Focus ring for keyboard nav */
+  .case-card:focus-visible {
+    outline: 2px solid var(--klein);
+    outline-offset: -4px;
+  }
+
+  /* Background cycle — parchment → blush → linen, hover shifts one step deeper */
+  .case-card--parchment              { background: var(--parchment); }
+  .case-card--parchment:hover        { background: var(--blush); }
+  .case-card--blush                  { background: var(--blush); }
+  .case-card--blush:hover            { background: var(--linen); }
+  .case-card--linen                  { background: var(--linen); }
+  .case-card--linen:hover            { background: var(--stone); }
+
+  /* CTA transitions to klein on card hover */
+  .case-card:hover .case-card__cta { color: var(--klein); }
+
+  /* ---- Top row: sector tag + card number ---- */
+  .case-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+
+  .case-card__sector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--body);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--dust);
+  }
+
+  /* Spring rule preceding the sector tag */
+  .case-card__sector::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--spring);
+    flex-shrink: 0;
+  }
+
+  .case-card__number {
+    font-family: var(--display);
+    font-size: clamp(16px, 1.6vw, 22px);
+    font-style: italic;
+    color: var(--umber);
+    letter-spacing: 0.01em;
+  }
+
+  /* ---- Organisation name ---- */
+  .case-card__org {
+    font-family: var(--display);
+    font-size: clamp(40px, 6vw, 88px);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+
+  /* ---- Metadata row: ROLE · YEAR ---- */
+  .case-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 44px;
+    margin-bottom: 24px;
+  }
+
+  .case-card__meta-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .case-card__meta-label {
+    font-family: var(--body);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dust);
+  }
+
+  .case-card__meta-value {
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--umber);
+    letter-spacing: 0.01em;
+  }
+
+  /* ---- Brief ---- */
+  .case-card__brief {
+    font-family: var(--body);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--umber);
+    max-width: 72ch;
+    margin-bottom: 44px;
+  }
+
+  /* ---- Bottom row: CTA + status ---- */
+  .case-card__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .case-card__cta {
+    font-family: var(--body);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--spring);
+    transition: color 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .case-card__status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--body);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--dust);
+  }
+
+  .case-card__status-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--spring);
+    flex-shrink: 0;
+  }
+
+  /* ---- Mobile ---- */
+  @media (max-width: 640px) {
+    .case-card {
+      padding: 40px 24px 48px;
+    }
+
+    .case-card__top {
+      margin-bottom: 24px;
+    }
+
+    .case-card__org {
+      margin-bottom: 20px;
+    }
+
+    .case-card__brief {
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
+  }
+
+  /* ============================================================
+     Preview chrome (strip out when adapting to Jekyll)
+     ============================================================ */
+  .preview-bar {
+    background: var(--midnight);
+    padding: 14px var(--pad-x);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .preview-bar__label {
+    font-family: var(--body);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(253, 248, 245, 0.4);
+  }
+
+  .preview-bar__tokens {
+    display: flex;
+    gap: 6px;
+  }
+
+  .preview-bar__swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Preview header — remove in Jekyll -->
+<div class="preview-bar" aria-hidden="true">
+  <span class="preview-bar__label">case-card · preview · willbeeps.com</span>
+  <div class="preview-bar__tokens" title="Surface cycle: parchment → blush → linen">
+    <div class="preview-bar__swatch" style="background:#fdf8f5"></div>
+    <div class="preview-bar__swatch" style="background:#f5ece6"></div>
+    <div class="preview-bar__swatch" style="background:#ede4db"></div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     CARD 01 — DWP · parchment
+     ============================================================ -->
+<a class="case-card case-card--parchment"
+   href="#"
+   aria-label="View case study: Department for Work and Pensions">
+
+  <div class="case-card__top">
+    <span class="case-card__sector">Government</span>
+    <span class="case-card__number">Nº 01</span>
+  </div>
+
+  <h2 class="case-card__org">Department for Work and Pensions</h2>
+
+  <div class="case-card__meta">
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Role</span>
+      <span class="case-card__meta-value">Lead UX Consultant / Service Designer</span>
+    </div>
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Year</span>
+      <span class="case-card__meta-value">2024–2025</span>
+    </div>
+  </div>
+
+  <p class="case-card__brief">A discovery and private beta to reduce friction for applicants and caseworkers handling a key working-age benefit claim — automating eligibility decisions without touching the legacy payment system.</p>
+
+  <div class="case-card__bottom">
+    <span class="case-card__cta">Read the case →</span>
+    <span class="case-card__status">
+      <span class="case-card__status-dot" aria-hidden="true"></span>
+      Shipped · Private beta
+    </span>
+  </div>
+
+</a>
+
+
+<!-- ============================================================
+     CARD 02 — Royal Navy · blush
+     ============================================================ -->
+<a class="case-card case-card--blush"
+   href="#"
+   aria-label="View case study: Royal Navy">
+
+  <div class="case-card__top">
+    <span class="case-card__sector">Defence</span>
+    <span class="case-card__number">Nº 02</span>
+  </div>
+
+  <h2 class="case-card__org">Royal Navy</h2>
+
+  <div class="case-card__meta">
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Role</span>
+      <span class="case-card__meta-value">Lead UX Researcher</span>
+    </div>
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Year</span>
+      <span class="case-card__meta-value">2023</span>
+    </div>
+  </div>
+
+  <p class="case-card__brief">User research and service design for a digital platform supporting the career management of Royal Navy personnel — a high-stakes service operating under significant legacy constraints and security requirements.</p>
+
+  <div class="case-card__bottom">
+    <span class="case-card__cta">Read the case →</span>
+    <span class="case-card__status">
+      <span class="case-card__status-dot" aria-hidden="true"></span>
+      Delivered · Internal
+    </span>
+  </div>
+
+</a>
+
+
+<!-- ============================================================
+     CARD 03 — St John Ambulance · linen
+     ============================================================ -->
+<a class="case-card case-card--linen"
+   href="#"
+   aria-label="View case study: St John Ambulance">
+
+  <div class="case-card__top">
+    <span class="case-card__sector">Charity</span>
+    <span class="case-card__number">Nº 03</span>
+  </div>
+
+  <h2 class="case-card__org">St John Ambulance</h2>
+
+  <div class="case-card__meta">
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Role</span>
+      <span class="case-card__meta-value">Lead UX Consultant</span>
+    </div>
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Year</span>
+      <span class="case-card__meta-value">2022</span>
+    </div>
+  </div>
+
+  <p class="case-card__brief">Digital transformation strategy and governance design for a national first aid charity — aligning a decentralised volunteer network around a coherent, shared digital service model for the first time.</p>
+
+  <div class="case-card__bottom">
+    <span class="case-card__cta">Read the case →</span>
+    <span class="case-card__status">
+      <span class="case-card__status-dot" aria-hidden="true"></span>
+      Delivered · Ongoing
+    </span>
+  </div>
+
+</a>
+
+
+<!-- ============================================================
+     CARD 04 — Age UK · parchment (cycle restarts)
+     ============================================================ -->
+<a class="case-card case-card--parchment"
+   href="#"
+   aria-label="View case study: Age UK">
+
+  <div class="case-card__top">
+    <span class="case-card__sector">Health &amp; Social Care</span>
+    <span class="case-card__number">Nº 04</span>
+  </div>
+
+  <h2 class="case-card__org">Age UK</h2>
+
+  <div class="case-card__meta">
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Role</span>
+      <span class="case-card__meta-value">Lead Service Designer</span>
+    </div>
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Year</span>
+      <span class="case-card__meta-value">2021–2022</span>
+    </div>
+  </div>
+
+  <p class="case-card__brief">Research-led redesign of digital support services for people living with dementia and their family carers — surfacing unmet needs across a complex patchwork of statutory and voluntary provision.</p>
+
+  <div class="case-card__bottom">
+    <span class="case-card__cta">Read the case →</span>
+    <span class="case-card__status">
+      <span class="case-card__status-dot" aria-hidden="true"></span>
+      Delivered · Completed
+    </span>
+  </div>
+
+</a>
+
+</body>
+</html>

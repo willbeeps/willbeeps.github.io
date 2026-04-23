@@ -1,53 +1,67 @@
 ---
-layout: default
+layout: home
+title: Will Scott
 ---
 
-<section class="hero">
-    <h1>Making things for the web is still fun. <span class="aside">No, I don't need a better definition of fun.</span> And still hard to get right. </h1>
+<section class="home-hero">
+  <h1>Making things for the web is still fun. <em class="color-spring">No, I don't need a better definition of fun.</em> And still hard to get right.</h1>
+  <div class="home-lead">
+  <p>I work in User Research and Experience Strategy.</p>
+  <p>It's a difficult job to explain to family and friends, but I've been doing it a while so I should be able to manage by now. <a href="/work">Here's a wee bit about work I've done</a>.</p>
+  <p><span class="bridge-col-label">Writing from Somerset · April 2026</span></p>
+</div>
 </section>
 
-<main class="content">
-    <h3>I work as a researcher and designer of services and experiences.</h3> 
-    <p>It’s a difficult job to explain to family and friends, but I've been doing it a while so I should be able to manage by now. <a href="/work">Here's a wee bit about work I've done</a>.</p> 
+<section class="home-bridge">
+  <div class="home-bridge-inner">
+    <div class="bridge-col">
+      <span class="bridge-col-label">What I do</span>
+      <p>I work as a researcher and designer of services and experiences. <a href="/work">Here's some of the work</a>.</p>
+    </div>
+    <div class="bridge-col">
+      <span class="bridge-col-label">Where I am</span>
+      <p>Currently working at <a href="https://valtech.com">Valtech</a>, living in Somerset. <a href="/now">Read more about right now</a>.</p>
+    </div>
+    <div class="bridge-col">
+      <span class="bridge-col-label">What I'm writing</span>
+      <p>A sporadically-updated <a href="/writing">feed of thoughts, links</a> and information on the practice of research and design.</p>
+    </div>
+  </div>
+</section>
 
-    <p>Currently, I’m working at a consultancy called <a href="https://valtech.com">Valtech</a>, and live in Somerset. You can read a bit more about <a href="/now">where I’m at right now</a></p>
-
-    <p>But a weblog wouldn’t be a weblog without <a href="/writing">a sporadically-updated feed</a> of thoughts, links and information on speaking engagements (spoiler alert: not many of these).</p>
-
-    <p>Thanks for stopping by.</p>
-
-</main>
 <div class="cosmos-section">
-    <div class="cosmos">
-      <div class="stars"></div>
-      <div class="stars-secondary"></div>
-      <div class="shooting-star"></div>
-      <div class="shooting-star"></div>
-      <div class="shooting-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
-      <div class="twinkle-star"></div>
+  <div class="cosmos">
+    <div class="stars"></div>
+    <div class="stars-secondary"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
+    <div class="twinkle-star"></div>
   </div>
   <div class="snippets-content">
-    <h3>Snippets of interest</h3>
-    <p>A never-ending stream of distraction devices</p>
-    <ul>
+    <h2 class="snippets-heading">Snippets of interest</h2>
+    <p class="snippets-sub">A never-ending stream of distraction devices</p>
+    <ul class="snippets-list">
       {% for link in site.data.links %}
-      <li>
-          <a href="{{ link.url }}"  target="_blank" rel="noopener noreferrer">{{ link.title }}</a> - {{ link.description }}
-          {% if link.date %}
-          <div class="link-date">{{ link.date }}</div>
-          {% endif %}
+      <li class="snippet-item">
+        <div class="snippet-left">
+          <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title }}</a>
+        </div>
+        <div class="snippet-right">
+          <span class="snippet-desc">{{ link.description }}</span>
+          {% if link.date %}<span class="snippet-date">{{ link.date }}</span>{% endif %}
+        </div>
       </li>
       {% endfor %}
-  </ul>
+    </ul>
+  </div>
 </div>
-
-

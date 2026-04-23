@@ -1,0 +1,59 @@
+{% comment %}
+  _includes/case-card.html
+  ========================
+  Required parameters:
+    post  — a site.cases item
+    index — 1-based loop integer (for Nº label)
+    bg    — parchment | blush | linen (background variant)
+
+  Graceful fallbacks for cases without new frontmatter:
+    sector      → post.position.first (existing array field)
+    date_range  → post.date | date: "%Y"
+    status      → hidden if absent
+    status_note → hidden if absent
+{% endcomment %}
+
+{%- assign _org             = include.post.organisation | default: include.post.title -%}
+{%- assign _year            = include.post.date_range | default: include.post.date | date: "%Y" -%}
+{%- assign _position_first  = include.post.position | first -%}
+{%- assign _sector          = include.post.sector | default: _position_first -%}
+
+<article class="case-card case-card--{{ include.bg }}">
+
+  <div class="case-card__top">
+    <span class="case-card__sector">{{ _sector }}</span>
+    <span class="case-card__number">Nº {% if include.index < 10 %}0{% endif %}{{ include.index }}</span>
+  </div>
+
+  <h2 class="case-card__org">
+    <a href="{{ include.post.url | relative_url }}" aria-label="View case study: {{ _org }}">{{ _org }}</a>
+  </h2>
+
+  <div class="case-card__meta">
+    {%- if include.post.role %}
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Role</span>
+      <span class="case-card__meta-value">{{ include.post.role }}</span>
+    </div>
+    {%- endif %}
+    <div class="case-card__meta-item">
+      <span class="case-card__meta-label">Year</span>
+      <span class="case-card__meta-value">{{ _year }}</span>
+    </div>
+  </div>
+
+  {%- if include.post.brief %}
+  <p class="case-card__brief">{{ include.post.brief }}</p>
+  {%- endif %}
+
+  <div class="case-card__bottom">
+    <span class="case-card__cta">Read the case →</span>
+    {%- if include.post.status %}
+    <span class="case-card__status">
+      <span class="case-card__status-dot" aria-hidden="true"></span>
+      {{ include.post.status }}{%- if include.post.status_note %} · {{ include.post.status_note }}{%- endif %}
+    </span>
+    {%- endif %}
+  </div>
+
+</article>

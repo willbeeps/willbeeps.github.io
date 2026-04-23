@@ -1,10 +1,10 @@
 ---
-layout: home
+layout: default
 title: Now
 permalink: /now/
 ---
 
-## Where I'm at now
+## Where I'm at now ##
 
 I am **working on** a problem in healthcare. Heavily regulated industries are the design equivalent of keyhole surgery.  
 
