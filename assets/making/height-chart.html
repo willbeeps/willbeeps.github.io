@@ -57,22 +57,6 @@
     padding:40px 0;
     text-align:center;
   }
-  .legend{
-    display:flex;
-    flex-wrap:wrap;
-    gap:14px;
-    margin-top:16px;
-    font-size:0.8rem;
-  }
-  .legend span{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-  }
-  .dot{
-    width:10px;height:10px;border-radius:50%;
-    display:inline-block;
-  }
   .foot{
     margin-top:14px;
     font-size:0.72rem;
@@ -88,17 +72,36 @@
       <div class="status" id="status">Fetching the latest measurements…</div>
       <canvas id="heightChart" style="display:none"></canvas>
     </div>
-    <div class="legend" id="legend"></div>
     <p class="foot">Data pulled directly from Google Sheets. No manual export step.</p>
   </div>
 
 <script>
 /* ---------- CONFIGURE THIS ---------- */
 // File → Share → Publish to web → choose the sheet/tab → CSV → copy the link here.
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTz8aTUAB9rWIZyv75icu5BtLXUZGqCG73D_aw7rBpykE29ZvQShYbw9EZYPpzXCInVJrfBzaeEw7Q5/pub?gid=0&single=true&output=csv";
+const SHEET_CSV_URL = "const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTz8aTUAB9rWIZyv75icu5BtLXUZGqCG73D_aw7rBpykE29ZvQShYbw9EZYPpzXCInVJrfBzaeEw7Q5/pub?gid=0&single=true&output=csv";
+";
 /* ------------------------------------ */
 
-const PENCILS = ["#E2735A", "#3E8F8F", "#D9A441", "#2F4858", "#7B5EA7"];
+const PENCILS = [
+  "#E2735A", // coral
+  "#3E8F8F", // teal
+  "#D9A441", // mustard
+  "#2F4858", // navy
+  "#7B5EA7", // plum
+  "#5B8C3E", // olive green
+  "#C24B72", // raspberry
+  "#4A7CB5", // sky blue
+  "#B5651D", // rust
+  "#8E6C4E"  // walnut brown
+];
+
+// If a family somehow grows past 10, generate extra evenly-spaced hues
+// rather than silently repeating colors.
+function colorForIndex(i) {
+  if (i < PENCILS.length) return PENCILS[i];
+  const hue = ((i - PENCILS.length) * 137.508) % 360; // golden-angle spacing
+  return `hsl(${hue}, 55%, 45%)`;
+}
 
 function parseCSV(text) {
   const rows = text.trim().split("\n").map(r => r.split(",").map(c => c.trim().replace(/^"|"$/g, "")));
@@ -140,14 +143,14 @@ async function loadChart() {
     const names = Object.keys(byPerson);
 
     const datasets = names.map((name, i) => {
-      const color = PENCILS[i % PENCILS.length];
+      const color = colorForIndex(i);
       return {
         label: name,
         data: byPerson[name].map(r => ({ x: r.age, y: r.height, date: r.date })),
         borderColor: color,
         backgroundColor: color,
-        pointRadius: 4,
-        pointHoverRadius: 6,
+        pointRadius: 2.5,
+        pointHoverRadius: 5,
         borderWidth: 2.5,
         tension: 0.25,
         fill: false
@@ -173,13 +176,32 @@ async function loadChart() {
             ticks: { color: "#6b6862" }
           },
           y: {
-            title: { display: true, text: "Height (cm)", color: "#6b6862" },
+            title: { display: true, text: "Height (m)", color: "#6b6862" },
             grid: { color: "rgba(51,49,46,0.15)", lineWidth: (ctx) => ctx.tick.value % 10 === 0 ? 1.5 : 0.5 },
             ticks: { color: "#6b6862" }
           }
         },
         plugins: {
-          legend: { display: false },
+          legend: {
+            display: true,
+            position: "bottom",
+            labels: {
+              color: "#33312E",
+              usePointStyle: true,
+              pointStyle: "circle",
+              padding: 16,
+              font: { family: "Inter", size: 12 }
+            },
+            onClick: (e, legendItem, legend) => {
+              // Default Chart.js behavior toggles the dataset — kept explicit
+              // here in case we want to customize (e.g. dim instead of hide) later.
+              const index = legendItem.datasetIndex;
+              const chart = legend.chart;
+              chart.isDatasetVisible(index)
+                ? chart.hide(index)
+                : chart.show(index);
+            }
+          },
           tooltip: {
             backgroundColor: "#33312E",
             titleFont: { family: "Kalam" },
@@ -187,19 +209,12 @@ async function loadChart() {
               title: (items) => items[0].dataset.label,
               label: (item) => {
                 const d = item.raw;
-                return `${d.y} cm at age ${d.x}${d.date ? " · " + d.date : ""}`;
+                return `${d.y} m at age ${d.x}${d.date ? " · " + d.date : ""}`;
               }
             }
           }
         }
       }
-    });
-
-    const legend = document.getElementById("legend");
-    names.forEach((name, i) => {
-      const el = document.createElement("span");
-      el.innerHTML = `<span class="dot" style="background:${PENCILS[i % PENCILS.length]}"></span>${name}`;
-      legend.appendChild(el);
     });
 
   } catch (err) {
