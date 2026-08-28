@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Family heights, on the wall</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root{
+    --wall: #EDE7DC;
+    --wall-dark: #E2DACB;
+    --ink: #33312E;
+    --ink-soft: #6b6862;
+    --coral: #E2735A;
+    --teal: #3E8F8F;
+    --mustard: #D9A441;
+    --navy: #2F4858;
+    --plum: #7B5EA7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--wall);
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    padding:24px;
+  }
+  .card{
+    max-width:900px;
+    margin:0 auto;
+    background:var(--wall-dark);
+    border-radius:6px;
+    padding:28px 28px 20px;
+    box-shadow: inset 0 0 0 1px rgba(51,49,46,0.06);
+  }
+  h1{
+    font-family:'Kalam',cursive;
+    font-weight:700;
+    font-size:1.9rem;
+    margin:0 0 2px;
+    color:var(--ink);
+  }
+  .sub{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+  }
+  .chart-wrap{
+    position:relative;
+    height:420px;
+  }
+  .status{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    padding:40px 0;
+    text-align:center;
+  }
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:16px;
+    font-size:0.8rem;
+  }
+  .legend span{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .dot{
+    width:10px;height:10px;border-radius:50%;
+    display:inline-block;
+  }
+  .foot{
+    margin-top:14px;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Heights, measured on the wall</h1>
+    <p class="sub">Live from the family spreadsheet — updates whenever a new row is added.</p>
+    <div class="chart-wrap">
+      <div class="status" id="status">Fetching the latest measurements…</div>
+      <canvas id="heightChart" style="display:none"></canvas>
+    </div>
+    <div class="legend" id="legend"></div>
+    <p class="foot">Data pulled directly from Google Sheets. No manual export step.</p>
+  </div>
+
+<script>
+/* ---------- CONFIGURE THIS ---------- */
+// File → Share → Publish to web → choose the sheet/tab → CSV → copy the link here.
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTz8aTUAB9rWIZyv75icu5BtLXUZGqCG73D_aw7rBpykE29ZvQShYbw9EZYPpzXCInVJrfBzaeEw7Q5/pub?gid=0&single=true&output=csv";
+/* ------------------------------------ */
+
+const PENCILS = ["#E2735A", "#3E8F8F", "#D9A441", "#2F4858", "#7B5EA7"];
+
+function parseCSV(text) {
+  const rows = text.trim().split("\n").map(r => r.split(",").map(c => c.trim().replace(/^"|"$/g, "")));
+  const header = rows.shift().map(h => h.toLowerCase());
+  const nameIdx = header.indexOf("name");
+  const heightIdx = header.indexOf("height");
+  const ageIdx = header.indexOf("age");
+  const dateIdx = header.indexOf("date");
+  return rows
+    .filter(r => r.length > 1 && r[nameIdx])
+    .map(r => ({
+      name: r[nameIdx],
+      height: parseFloat(r[heightIdx]),
+      age: parseFloat(r[ageIdx]),
+      date: r[dateIdx]
+    }));
+}
+
+function groupByPerson(rows) {
+  const byName = {};
+  rows.forEach(r => {
+    if (!byName[r.name]) byName[r.name] = [];
+    byName[r.name].push(r);
+  });
+  Object.values(byName).forEach(arr => arr.sort((a, b) => a.age - b.age));
+  return byName;
+}
+
+async function loadChart() {
+  const statusEl = document.getElementById("status");
+  try {
+    const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("Couldn't reach the sheet (" + res.status + ")");
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if (!rows.length) throw new Error("No rows found — check the column names are Name, Height, Age, Date");
+
+    const byPerson = groupByPerson(rows);
+    const names = Object.keys(byPerson);
+
+    const datasets = names.map((name, i) => {
+      const color = PENCILS[i % PENCILS.length];
+      return {
+        label: name,
+        data: byPerson[name].map(r => ({ x: r.age, y: r.height, date: r.date })),
+        borderColor: color,
+        backgroundColor: color,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2.5,
+        tension: 0.25,
+        fill: false
+      };
+    });
+
+    const canvas = document.getElementById("heightChart");
+    statusEl.style.display = "none";
+    canvas.style.display = "block";
+
+    new Chart(canvas, {
+      type: "line",
+      data: { datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "nearest", intersect: false },
+        scales: {
+          x: {
+            type: "linear",
+            title: { display: true, text: "Age (years)", color: "#6b6862" },
+            grid: { color: "rgba(51,49,46,0.08)" },
+            ticks: { color: "#6b6862" }
+          },
+          y: {
+            title: { display: true, text: "Height (cm)", color: "#6b6862" },
+            grid: { color: "rgba(51,49,46,0.15)", lineWidth: (ctx) => ctx.tick.value % 10 === 0 ? 1.5 : 0.5 },
+            ticks: { color: "#6b6862" }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: "#33312E",
+            titleFont: { family: "Kalam" },
+            callbacks: {
+              title: (items) => items[0].dataset.label,
+              label: (item) => {
+                const d = item.raw;
+                return `${d.y} cm at age ${d.x}${d.date ? " · " + d.date : ""}`;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const legend = document.getElementById("legend");
+    names.forEach((name, i) => {
+      const el = document.createElement("span");
+      el.innerHTML = `<span class="dot" style="background:${PENCILS[i % PENCILS.length]}"></span>${name}`;
+      legend.appendChild(el);
+    });
+
+  } catch (err) {
+    statusEl.textContent = "Couldn't load the chart: " + err.message;
+  }
+}
+
+loadChart();
+</script>
+</body>
+</html>

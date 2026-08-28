@@ -48,6 +48,9 @@ _Lots of back and forth at this point, due to the fact that the script had cache
 
 Finally got it up and running. Hey presto...
 
+<bold>2026 update</bold>: here's a newer version.
+<iframe src="/assets/making/height-chart.html" style="width:100%; border:0; height:600px"></iframe>
+
 <div class="full-width"> 
         <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
         <script type="text/javascript">/**
